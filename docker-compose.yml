@@ -209,7 +209,7 @@ services:
     image: linuxserver/wireguard
     container_name: vpn
     volumes:
-      - ./docker-wireguard:/config/
+      - ./wireguard:/config/
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
