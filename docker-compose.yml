@@ -5,11 +5,6 @@ services:
     image: traefik:v2.9
     container_name: traefik
     restart: always
-    environment:
-      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
-      - CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
-      - CLOUDFLARE_ZONE_API_TOKEN=${CLOUDFLARE_ZONE_API_TOKEN}
-      - LETS_ENCRYPT_EMAIL=${LETS_ENCRYPT_EMAIL}
     command:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
@@ -18,11 +13,6 @@ services:
       - --entrypoints.web.http.redirections.entryPoint.to=web-secure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
       - --entrypoints.web.http.redirections.entrypoint.permanent=true
-      - --certificatesresolvers.myresolver.acme.dnschallenge=${DNS_CHALLENGE:-true}
-      - --certificatesresolvers.myresolver.acme.dnschallenge.provider=${DNS_CHALLENGE_PROVIDER:-cloudflare}
-      - --certificatesresolvers.myresolver.acme.caserver=${LETS_ENCRYPT_CA_SERVER:-https://acme-v02.api.letsencrypt.org/directory}
-      - --certificatesresolvers.myresolver.acme.email=${LETS_ENCRYPT_EMAIL}
-      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     ports:
       - "80:80"
       - "443:443"
@@ -44,8 +34,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.sonarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/sonarr`))
-      - traefik.http.routers.sonarr.tls=true
-      - traefik.http.routers.sonarr.tls.certresolver=myresolver
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
       - homepage.group=Media
       - homepage.name=Sonarr
@@ -71,8 +59,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.radarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/radarr`))
-      - traefik.http.routers.radarr.tls=true
-      - traefik.http.routers.radarr.tls.certresolver=myresolver
       - traefik.http.services.radarr.loadbalancer.server.port=7878
       - homepage.group=Media
       - homepage.name=Radarr
@@ -97,8 +83,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.prowlarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/prowlarr`))
-      - traefik.http.routers.prowlarr.tls=true
-      - traefik.http.routers.prowlarr.tls.certresolver=myresolver
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
       - homepage.group=Download
       - homepage.name=Prowlarr
@@ -124,8 +108,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.lidarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/lidarr`))
-      - traefik.http.routers.lidarr.tls=true
-      - traefik.http.routers.lidarr.tls.certresolver=myresolver
       - traefik.http.services.lidarr.loadbalancer.server.port=7878
       - homepage.group=Media
       - homepage.name=lidarr
@@ -151,8 +133,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.readarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/readarr`))
-      - traefik.http.routers.readarr.tls=true
-      - traefik.http.routers.readarr.tls.certresolver=myresolver
       - traefik.http.services.readarr.loadbalancer.server.port=7878
       - homepage.group=Media
       - homepage.name=readarr
@@ -183,8 +163,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.qbittorrent.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/qbittorrent`))
-      - traefik.http.routers.qbittorrent.tls=true
-      - traefik.http.routers.qbittorrent.tls.certresolver=myresolver
       - traefik.http.services.qbittorrent.loadbalancer.server.port=8080
       - traefik.http.routers.qbittorrent.middlewares=qbittorrent-strip-slash,qbittorrent-stripprefix
       # https://github.com/qbittorrent/qBittorrent/issues/5693#issuecomment-552146296
@@ -253,8 +231,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.jellyfin.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/jellyfin`))
-      - traefik.http.routers.jellyfin.tls=true
-      - traefik.http.routers.jellyfin.tls.certresolver=myresolver
       - traefik.http.services.jellyfin.loadbalancer.server.port=8096
       - homepage.group=Media
       - homepage.name=Jellyfin
@@ -287,8 +263,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.homepage.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/`))
-      - traefik.http.routers.homepage.tls=true
-      - traefik.http.routers.homepage.tls.certresolver=myresolver
       - traefik.http.services.homepage.loadbalancer.server.port=3000
 
   watchtower:
@@ -314,8 +288,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.sabnzbd.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/sabnzbd`) || PathPrefix(`/sabnzbd`))
-      - traefik.http.routers.sabnzbd.tls=true
-      - traefik.http.routers.sabnzbd.tls.certresolver=myresolver
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
       - homepage.group=Media
       - homepage.name=Sabnzbd
