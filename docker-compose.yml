@@ -138,7 +138,7 @@ services:
       - homepage.widget.key=${LIDARR_API_KEY}
 
   readarr:
-    image: lscr.io/linuxserver/readarr:latest
+    image: lscr.io/linuxserver/readarr:nightly
     container_name: readarr
     environment:
       - PUID=${USER_ID}
