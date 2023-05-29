@@ -33,7 +33,7 @@ services:
     restart: always
     labels:
       - traefik.enable=true
-      - traefik.http.routers.sonarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/sonarr`))
+      - traefik.http.routers.sonarr.rule=(PathPrefix(`/sonarr`))
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
       - homepage.group=Media
       - homepage.name=Sonarr
@@ -58,7 +58,7 @@ services:
     restart: always
     labels:
       - traefik.enable=true
-      - traefik.http.routers.radarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/radarr`))
+      - traefik.http.routers.radarr.rule=(PathPrefix(`/radarr`))
       - traefik.http.services.radarr.loadbalancer.server.port=7878
       - homepage.group=Media
       - homepage.name=Radarr
@@ -82,7 +82,7 @@ services:
     restart: always
     labels:
       - traefik.enable=true
-      - traefik.http.routers.prowlarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/prowlarr`))
+      - traefik.http.routers.prowlarr.rule=(PathPrefix(`/prowlarr`))
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
       - homepage.group=Download
       - homepage.name=Prowlarr
@@ -107,7 +107,7 @@ services:
     restart: always
     labels:
       - traefik.enable=true
-      - traefik.http.routers.lidarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/lidarr`))
+      - traefik.http.routers.lidarr.rule=(PathPrefix(`/lidarr`))
       - traefik.http.services.lidarr.loadbalancer.server.port=7878
       - homepage.group=Media
       - homepage.name=lidarr
@@ -132,7 +132,7 @@ services:
     restart: always
     labels:
       - traefik.enable=true
-      - traefik.http.routers.readarr.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/readarr`))
+      - traefik.http.routers.readarr.rule=(PathPrefix(`/readarr`))
       - traefik.http.services.readarr.loadbalancer.server.port=7878
       - homepage.group=Media
       - homepage.name=readarr
@@ -162,7 +162,7 @@ services:
         condition: service_healthy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.qbittorrent.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/qbittorrent`))
+      - traefik.http.routers.qbittorrent.rule=(PathPrefix(`/qbittorrent`))
       - traefik.http.services.qbittorrent.loadbalancer.server.port=8080
       - traefik.http.routers.qbittorrent.middlewares=qbittorrent-strip-slash,qbittorrent-stripprefix
       # https://github.com/qbittorrent/qBittorrent/issues/5693#issuecomment-552146296
@@ -230,7 +230,7 @@ services:
     restart: always
     labels:
       - traefik.enable=true
-      - traefik.http.routers.jellyfin.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/jellyfin`))
+      - traefik.http.routers.jellyfin.rule=(PathPrefix(`/jellyfin`))
       - traefik.http.services.jellyfin.loadbalancer.server.port=8096
       - homepage.group=Media
       - homepage.name=Jellyfin
@@ -262,7 +262,7 @@ services:
     command: [sh, -c, "cp -n /app/config/tpl/*.yaml /app/config && node server.js"]
     labels:
       - traefik.enable=true
-      - traefik.http.routers.homepage.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/`))
+      - traefik.http.routers.homepage.rule=(PathPrefix(`/`))
       - traefik.http.services.homepage.loadbalancer.server.port=3000
 
   watchtower:
@@ -287,7 +287,7 @@ services:
     restart: always
     labels:
       - traefik.enable=true
-      - traefik.http.routers.sabnzbd.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/sabnzbd`) || PathPrefix(`/sabnzbd`))
+      - traefik.http.routers.sabnzbd.rule=(PathPrefix(`/sabnzbd`) || PathPrefix(`/sabnzbd`))
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
       - homepage.group=Media
       - homepage.name=Sabnzbd
