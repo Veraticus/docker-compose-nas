@@ -131,7 +131,7 @@ services:
       - homepage.name=lidarr
       - homepage.icon=lidarr.png
       - homepage.href=/lidarr
-      - homepage.description=Movies management
+      - homepage.description=Music management
       - homepage.weight=1
       - homepage.widget.type=lidarr
       - homepage.widget.url=http://lidarr:8686/lidarr
@@ -158,7 +158,7 @@ services:
       - homepage.name=readarr
       - homepage.icon=readarr.png
       - homepage.href=/readarr
-      - homepage.description=Movies management
+      - homepage.description=Book management
       - homepage.weight=1
       - homepage.widget.type=readarr
       - homepage.widget.url=http://readarr:8787/readarr
