@@ -165,21 +165,27 @@ services:
       - homepage.widget.key=${READARR_API_KEY}
 
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:libtorrentv1
+    image: dyonr/qbittorrentvpn:latest
     container_name: qbittorrent
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
       - WEBUI_PORT=8080
+      - VPN_TYPE=wireguard
+      - NAME_SERVERS=192.168.1.1
     volumes:
       - ./qbittorrent:/config
-      - ${DOWNLOAD_ROOT}:/data/torrents
+      - ${DOWNLOAD_ROOT}:/downloads
     restart: always
-    network_mode: "service:vpn"
-    depends_on:
-      vpn:
-        condition: service_healthy
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.default.disable_ipv6=1
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.lo.disable_ipv6=1
     labels:
       - traefik.enable=true
       - traefik.http.routers.qbittorrent.rule=(Host(`${HOSTNAME}`) && PathPrefix(`/qbittorrent`))
@@ -204,27 +210,6 @@ services:
       - homepage.widget.url=http://vpn:8080
       - homepage.widget.username=admin
       - homepage.widget.password=adminadmin
-
-  vpn:
-    image: linuxserver/wireguard
-    container_name: vpn
-    volumes:
-      - ./wireguard:/config/
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-    environment:
-      - PUID=${USER_ID}
-      - PGID=${GROUP_ID}
-      - TZ=${TIMEZONE}
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-    healthcheck:
-      test: ping -c 1 www.google.com || exit 1
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    restart: always
     labels:
       # network mode is not supported: https://github.com/containrrr/watchtower/issues/1286#issuecomment-1214291660
       - com.centurylinklabs.watchtower.enable=false
